@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>LU Stream Tool - Settings</title>
+        <link rel = "stylesheet" href = "styles.css">
+        <script type = "text/tiscript" src = "settings.ts"></script>
+    </head>
+    <body>
+        <form>
+            <div class = "header">
+                <img src = "stream_tool.png" width = "80px" style = "padding: 5px; float: left;">
+                <h1 style = "float: left; padding: 13px 8px 0;">Settings</h1>
+            </div>
+            <div class = "grid_container_settings">
+                <div>
+                    <h2>General Settings</h2>
+                    <div class = "row">
+                        <label for = "update_swap">After Swap: </label>
+                        <select(update_swap) id = "update_swap">
+                            <option value = "false" selected>Don't Update</option>
+                            <option value = "true">Update</option>
+                        </select>
+                    </div>
+                    <div class = "row">
+                        <label for = "update_queue_up">After Move Queued Players: </label>
+                        <select(update_queue_up) id = "update_queue_up">
+                            <option value = "false" selected>Don't Update</option>
+                            <option value = "true">Update</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <div class = "row">
+                        <button #save id = "save">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+{
+	"p1_name":"Player 1",
+	"p1_score":"2",
+	"p1_port":1,
+	"p1_bracket":"Winners",
+	"p2_name":"Player 2",
+	"p2_score":"1",
+	"p2_port":2,
+	"p2_bracket":0,
+	"set":"Round ",
+	"round_num":"1",
+	"best_of":3,
+	"queued_p1_name":"Player 3",
+	"queued_p2_name":"Player 4",
+	"queued_set":"None",
+	"queued_round_num":"2",
+	"game":"Super Smash Bros. Singles",
+	"tournament_name":"Tournament",
+	"tournament_message":"Weekly Smash Bros. Tournament"
+}

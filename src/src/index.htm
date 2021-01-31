@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <title>LU Stream Tool</title>
+        <link rel = "stylesheet" href = "styles.css">
+        <script type = "text/tiscript" src = "script.ts"></script>
+    </head>
+    <body>
+        <form>
+            <div class = "header">
+                <img src = "stream_tool.png" width = "80px" style = "padding: 5px; float: left;">
+                <h1 style = "float: left; padding: 13px 8px 0;">LU Stream Tool</h1>
+                <button #settings id = "settings"></button>
+            </div>
+            <div class = "grid_container">
+                <div class = "p1_container">
+                    <h2>Player 1</h2>
+                    <div class = "row">
+                        <label for = "p1_name">Name: </label>
+                        <input(p1_name) id = "p1_name" value = "Name">
+                    </div>
+                    <div class = "row">
+                        <label for = "p1_score">Score: </label>
+                        <input(p1_score) id = "p1_score" value = "0">
+                    </div>
+                    <div class = "row">
+                        <label for = "p1_port">Port: </label>
+                        <select(p1_port) id = "p1_port">
+                            <option value = "0" selected>Generic</option>
+                            <option value = "1">1</option>
+                            <option value = "2">2</option>
+                            <option value = "3">3</option>
+                            <option value = "4">4</option>
+                        </select>
+                    </div>
+                    <div class = "row">
+                        <label for = "p1_bracket">Bracket: </label>
+                        <select(p1_bracket) id = "p1_bracket">
+                            <option value = "0" selected>Don't Show</option>
+                            <option value = "Winners">Winners</option>
+                            <option value = "Losers">Losers</option>
+                        </select>
+                    </div>
+                </div>
+                <div class = "p2_container">
+                    <h2>Player 2</h2>
+                    <div class = "row">
+                        <label for = "p2_name">Name: </label>
+                        <input(p2_name) id = "p2_name" value = "Name">
+                    </div>
+                    <div class = "row">
+                        <label for = "p2_score">Score: </label>
+                        <input(p2_score) id = "p2_score" value = "0">
+                    </div>
+                    <div class = "row">
+                        <label for = "p2_port">Port: </label>
+                        <select(p2_port) id = "p2_port">
+                            <option value = "0" selected>Generic</option>
+                            <option value = "1">1</option>
+                            <option value = "2">2</option>
+                            <option value = "3">3</option>
+                            <option value = "4">4</option>
+                        </select>
+                    </div>
+                    <div class = "row">
+                        <label for = "p2_bracket">Bracket: </label>
+                        <select(p2_bracket) id = "p2_bracket">
+                            <option value = "0" selected>Don't Show</option>
+                            <option value = "Winners">Winners</option>
+                            <option value = "Losers">Losers</option>
+                        </select>
+                    </div>
+                </div>
+                <div class = "set_info_container">
+                    <h2>Set Information</h2>
+                    <div class = "row">
+                        <label for = "set">Set: </label>
+                        <select(set) id = "set">
+                            <option value = "None" selected>None</option>
+                            <option value = "Friendlies">Friendlies</option>
+                            <option value = "Round ">Round</option>
+                            <option value = "Winner's Quarters">Winner's Quarters</option>
+                            <option value = "Winner's Semis">Winner's Semis</option>
+                            <option value = "Winner's Finals">Winner's Finals</option>
+                            <option value = "Loser's Quarters">Loser's Quarters</option>
+                            <option value = "Loser's Semis">Loser's Semis</option>
+                            <option value = "Loser's Finals">Loser's Finals</option>
+                            <option value = "Grand Finals">Grand Finals</option>
+                            <option value = "Grand Finals Reset">Grand Finals Reset</option>
+                        </select>
+                    </div>
+                    <div class = "row">
+                        <label for = "round_num">Round Number: </label>
+                        <input(round_num) id = "round_num" value = "1">
+                    </div>
+                    <div class = "row">
+                        <label for = "game_count">Game Count: </label>
+                        <select(best_of) id = "game_count">
+                            <option value = "0">None</option>
+                            <option value = "1">Best of 1</option>
+                            <option value = "3" selected>Best of 3</option>
+                            <option value = "5">Best of 5</option>
+                        </select>
+                    </div>
+                </div>
+                <div class = "queued_set_info_container">
+                    <h2>Queued Set Information</h2>
+                    <div class = "row">
+                        <label for = "queued_p1_name">Name: </label>
+                        <input(queued_p1_name) id = "queued_p1_name" value = "Name">
+                    </div>
+                    <div class = "row">
+                        <label for = "queued_p2_name">Name: </label>
+                        <input(queued_p2_name) id = "queued_p2_name" value = "Name">
+                    </div>
+                    <div class = "row">
+                        <label for = "queued_set">Queued Set: </label>
+                        <select(queued_set) id = "queued_set">
+                            <option value = "None" selected>None</option>
+                            <option value = "Friendlies">Friendlies</option>
+                            <option value = "Round ">Round</option>
+                            <option value = "Winner's Quarters">Winner's Quarters</option>
+                            <option value = "Winner's Semis">Winner's Semis</option>
+                            <option value = "Winner's Finals">Winner's Finals</option>
+                            <option value = "Loser's Quarters">Loser's Quarters</option>
+                            <option value = "Loser's Semis">Loser's Semis</option>
+                            <option value = "Loser's Finals">Loser's Finals</option>
+                            <option value = "Grand Finals">Grand Finals</option>
+                            <option value = "Grand Finals Reset">Grand Finals Reset</option>
+                        </select>
+                    </div>
+                    <div class = "row">
+                        <label for = "queued_round_num">Queued Round Number: </label>
+                        <input(queued_round_num) id = "queued_round_num" value = "1">
+                    </div>
+                </div>
+                <div class = "tournament_info_container">
+                    <h2>Tournament Information</h2>
+                    <div class = "row">
+                        <label for = "game">Game: </label>
+                        <input(game) id = "game" value = "Super Smash Bros.">
+                    </div>
+                    <div class = "row">
+                        <label for = "tournament_name">Tournament Name: </label>
+                        <input(tournament_name) id = "tournament_name" value = "Lynchburg Smash">
+                    </div>
+                    <div class = "row">
+                        <label for = "tournament_message">Tournament Message: </label>
+                        <input(tournament_message) id = "tournament_message" value = "">
+                    </div>
+                </div>
+                <div class = "controls_container">
+                    <div class = "row">
+                        <button #swap id = "swap">Swap Players</button>
+                        <button #queue_up id = "queue_up">Move Queued Players</button>
+                    </div>
+                    <div class = "row">
+                        <button #update id = "update">Update!</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </body>
+</html>
