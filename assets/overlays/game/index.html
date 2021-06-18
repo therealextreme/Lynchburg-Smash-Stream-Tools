@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta   charset = "UTF-8">
+        <script>
+            let startup = true;
+
+            window.onload = init;
+
+            function init() {
+                async function main() {
+                    const game = await get_info("game");
+                    parse_data(game);
+                }
+                main();
+                setInterval( () => {
+                    main();
+                }, 15);
+            }
+
+            function parse_data(game) {
+
+                let set_name =          game["set_name"];
+                let event_name =        game["event_name"];
+                let tournament_name =   game["tournament_name"];
+                let tournament_date =   game["tournament_date"];
+
+                let p1_id =             game["p1_id"];
+                let p1_name =           game["p1_name"];
+                let p1_score =          game["p1_score"];
+                let p1_bracket =        game["p1_bracket"];
+                let p2_id =             game["p2_id"];
+                let p2_name =           game["p2_name"];
+                let p2_score =          game["p2_score"];
+                let p2_bracket =        game["p2_bracket"];
+
+                let c1_id =             game["c1_id"];
+                let c1_name =           game["c1_name"];
+                let c1_socials =        game["c1_socials"];
+                let c2_id =             game["c2_id"];
+                let c2_name =           game["c2_name"];
+                let c2_socials =        game["c2_socials"];
+
+                if (startup == true) {
+
+                    document.getElementById("p1_id_value").textContent =            p1_id;
+                    document.getElementById("p1_name_value").textContent =          p1_name;
+                    document.getElementById("p1_score_value").textContent =         p1_score;
+                    document.getElementById("p1_bracket_value").textContent =       p1_bracket;
+                    document.getElementById("p2_id_value").textContent =            p2_id;
+                    document.getElementById("p2_name_value").textContent =          p2_name;
+                    document.getElementById("p2_score_value").textContent =         p2_score;
+                    document.getElementById("p2_bracket_value").textContent =       p2_bracket;
+                    document.getElementById("set_name_value").textContent =         set_name;
+                    document.getElementById("event_name_value").textContent =       event_name;
+                    document.getElementById("c1_id_value").textContent =            c1_id;
+                    document.getElementById("c1_name_value").textContent =          c1_name;
+                    try {
+                        document.getElementById("c1_social_1_value").textContent =  c1_socials[0]["externalUsername"];
+                        document.getElementById("c1_social_1_image").src =          "http://localhost:8000/?image=socials/" + c1_socials[0]["type"] + ".png";
+                    }
+                    catch(err) {
+                        document.getElementById("c1_social_1_value").textContent =  "";
+                        document.getElementById("c1_social_1_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                    }
+                    try {
+                        document.getElementById("c1_social_2_value").textContent =  c1_socials[1]["externalUsername"];
+                        document.getElementById("c1_social_2_image").src =          "http://localhost:8000/?image=socials/" + c1_socials[1]["type"] + ".png";
+                    }
+                    catch(err) {
+                        document.getElementById("c1_social_2_value").textContent =  "";
+                        document.getElementById("c1_social_2_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                    }
+                    try {
+                        document.getElementById("c1_social_3_value").textContent =  c1_socials[2]["externalUsername"];
+                        document.getElementById("c1_social_3_image").src =          "http://localhost:8000/?image=socials/" + c1_socials[2]["type"] + ".png";
+                    }
+                    catch(err) {
+                        document.getElementById("c1_social_3_value").textContent =  "";
+                        document.getElementById("c1_social_3_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                    }
+                    document.getElementById("c2_id_value").textContent =            c2_id;
+                    document.getElementById("c2_name_value").textContent =          c2_name;
+                    try {
+                        document.getElementById("c2_social_1_value").textContent =  c2_socials[0]["externalUsername"];
+                        document.getElementById("c2_social_1_image").src =          "http://localhost:8000/?image=socials/" + c2_socials[0]["type"] + ".png";
+                    }
+                    catch(err) {
+                        document.getElementById("c2_social_1_value").textContent =  "";
+                        document.getElementById("c2_social_1_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                    }
+                    try {
+                        document.getElementById("c2_social_2_value").textContent =  c2_socials[1]["externalUsername"];
+                        document.getElementById("c2_social_2_image").src =          "http://localhost:8000/?image=socials/" + c2_socials[1]["type"] + ".png";
+                    }
+                    catch(err) {
+                        document.getElementById("c2_social_2_value").textContent =  "";
+                        document.getElementById("c2_social_2_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                    }
+                    try {
+                        document.getElementById("c2_social_3_value").textContent =  c2_socials[2]["externalUsername"];
+                        document.getElementById("c2_social_3_image").src =          "http://localhost:8000/?image=socials/" + c2_socials[2]["type"] + ".png";
+                    }
+                    catch(err) {
+                        document.getElementById("c2_social_3_value").textContent =  "";
+                        document.getElementById("c2_social_3_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                    }
+                    document.getElementById("tournament_name_value").textContent =  tournament_name;
+                    document.getElementById("tournament_date_value").textContent =  tournament_date;
+
+                    setTimeout(() => {
+
+                        fade_in("p1_name_location");
+                        fade_in("p2_name_location");
+                        if (set_name != "Friendlies") {
+                            if (p1_score != "") { fade_in("p1_score_location"); }
+                            if (p2_score != "") { fade_in("p2_score_location"); }
+                        }
+                        if (set_name == "Grand Finals" || set_name == "Grand Finals Reset") {
+                            if (p1_bracket != "") { fade_in("p1_bracket_location"); }
+                            if (p2_bracket != "") { fade_in("p2_bracket_location"); }
+                        }
+                        fade_in("set_name_location");
+                        fade_in("caster_location");
+                        fade_in("c1_name_location");
+                        fade_in("c2_name_location");
+                        swap_date();
+                        rotate_c1_socials_1();
+                        rotate_c2_socials_1();
+                        startup = false;
+
+                    }, 500);
+                }
+                else {
+                    if (document.getElementById("p1_name_value").textContent != p1_name) {
+                        update_value("p1_name", p1_name);
+                    }
+                    if (set_name != "Friendlies") {
+                        if (document.getElementById("p1_score_value").textContent != p1_score && p1_score != "") {
+                            update_value("p1_score", p1_score);
+                        }
+                        else if (document.getElementById("p1_score_value").textContent != p1_score) {
+                            fade_out("p1_score_location", function() { document.getElementById("p1_score_value").textContent = ""; });
+                        }
+                        if (document.getElementById("p2_score_value").textContent != p2_score && p2_score != "") {
+                            update_value("p2_score", p2_score);
+                        }
+                        else if (document.getElementById("p2_score_value").textContent != p2_score) {
+                            fade_out("p2_score_location", function() { document.getElementById("p2_score_value").textContent = ""; });
+                        }
+                    }
+                    else {
+                        fade_out("p1_score_location", function() { document.getElementById("p1_score_value").textContent = ""; })
+                        fade_out("p2_score_location", function() { document.getElementById("p2_score_value").textContent = ""; })
+                    }
+                    if (document.getElementById("p2_name_value").textContent != p2_name) {
+                        update_value("p2_name", p2_name)
+                    }
+                    if (document.getElementById("set_name_value").textContent != set_name) {
+                        update_value("set_name", set_name);
+                    }
+                    if (set_name == "Grand Finals" || set_name == "Grand Finals Reset") {
+                        if (document.getElementById("p1_bracket_value").textContent != p1_bracket && (document.getElementById("p1_bracket_value").textContent != "" || document.getElementById("p1_bracket_value").textContent != null)) {
+                            update_value("p1_bracket", p1_bracket);
+                        }
+                        else if (document.getElementById("p1_bracket_value").textContent != p1_bracket) {
+                            document.getElementById("p1_bracket_value").textContent = p1_bracket;
+                            fade_in("p1_bracket_location");
+                        }
+                        else if (p1_bracket == "") {
+                            fade_out("p1_bracket_location", function() { document.getElementById("p1_bracket_value").textContent = p1_bracket; })
+                        }
+                        else {
+                            fade_in("p1_bracket_location");
+                        }
+                        if (document.getElementById("p2_bracket_value").textContent != p2_bracket && (document.getElementById("p2_bracket_value").textContent != "" || document.getElementById("p2_bracket_value").textContent != null)) {
+                            update_value("p2_bracket", p2_bracket);
+                        }
+                        else if (document.getElementById("p2_bracket_value").textContent != p2_bracket) {
+                            document.getElementById("p2_bracket_value").textContent = p2_bracket;
+                            fade_in("p2_bracket_location");
+                        }
+                        else if (p2_bracket == "") {
+                            fade_out("p2_bracket_location", function() { document.getElementById("p2_bracket_value").textContent = p2_bracket; })
+                        }
+                        else {
+                            fade_in("p2_bracket_location");
+                        }
+                    }
+                    else {
+                        fade_out("p1_bracket_location", function() { document.getElementById("p1_bracket_value").textContent = ""; })
+                        fade_out("p2_bracket_location", function() { document.getElementById("p2_bracket_value").textContent = ""; })
+                    }
+                }
+                return;
+            }
+
+            function update_value(id, value) {
+                fade_out(id + "_location", function() {});
+                setTimeout( function() {
+                    document.getElementById(id + "_value").textContent = value;
+                    fade_in(id + "_location");
+                }, 500);
+            }
+
+            function fade_out(id, callback) {
+                document.getElementById(id).classList.toggle("fade_out", true);
+                document.getElementById(id).classList.toggle("fade_in", false);
+                setTimeout( function() { callback(); }, 500);
+            }
+
+            function fade_in(id) {
+                document.getElementById(id).classList.toggle("fade_in", true);
+                document.getElementById(id).classList.toggle("fade_out", false);
+            }
+
+            function swap_date() {
+                fade_out("tournament_date_location", function() {});
+                fade_in("event_name_location", function() {});
+                setTimeout( function() { swap_event(); }, 7500);
+            }
+
+            function swap_event() {
+                fade_in("tournament_date_location", function() {});
+                fade_out("event_name_location", function() {});
+                setTimeout( function() { swap_date(); }, 7500);
+            }
+
+            function rotate_c1_socials_1() {
+                fade_in("c1_social_1_location");
+                fade_out("c1_social_2_location", function() {});
+                fade_out("c1_social_3_location", function() {});
+                setTimeout( function() {
+                    if (document.getElementById("c1_social_2_value").textContent == "") {
+                        rotate_c1_socials_1();
+                    }
+                    else {
+                        rotate_c1_socials_2();
+                    }
+                }, 7500);
+            }
+
+            function rotate_c1_socials_2() {
+                fade_in("c1_social_2_location");
+                fade_out("c1_social_1_location", function() {});
+                fade_out("c1_social_3_location", function() {});
+                setTimeout( function() {
+                    if (document.getElementById("c1_social_3_value").textContent == "") {
+                        rotate_c1_socials_1();
+                    }
+                    else {
+                        rotate_c1_socials_3();
+                    }
+                }, 7500);
+            }
+
+            function rotate_c1_socials_3() {
+                fade_in("c1_social_3_location");
+                fade_out("c1_social_1_location", function() {});
+                fade_out("c1_social_2_location", function() {});
+                setTimeout( function() { rotate_c1_socials_1(); }, 7500);
+            }
+
+            function rotate_c2_socials_1() {
+                fade_in("c2_social_1_location");
+                fade_out("c2_social_2_location", function() {});
+                fade_out("c2_social_3_location", function() {});
+                setTimeout( function() {
+                    if (document.getElementById("c2_social_2_value").textContent == "") {
+                        rotate_c2_socials_1();
+                    }
+                    else {
+                        rotate_c2_socials_2();
+                    }
+                }, 7500);
+            }
+
+            function rotate_c2_socials_2() {
+                fade_in("c2_social_2_location");
+                fade_out("c2_social_1_location", function() {});
+                fade_out("c2_social_3_location", function() {});
+                setTimeout( function() {
+                    if (document.getElementById("c2_social_3_value").textContent == "") {
+                        rotate_c2_socials_1();
+                    }
+                    else {
+                        rotate_c2_socials_3();
+                    }
+                }, 7500);
+            }
+
+            function rotate_c2_socials_3() {
+                fade_in("c2_social_3_location");
+                fade_out("c2_social_1_location", function() {});
+                fade_out("c2_social_2_location", function() {});
+                setTimeout( function() { rotate_c2_socials_1(); }, 7500);
+            }
+
+            function get_info(file) {
+                return new Promise(function(resolve) {
+                    const request = new XMLHttpRequest();
+                    request.addEventListener("load", request_listener);
+                    request.open("GET", "http://localhost:8000/?info=" + file);
+                    request.send();
+
+                    function request_listener () {
+                        resolve(JSON.parse(request.responseText))
+                    }
+                })
+            }
+        </script>
+        <style>
+            @font-face { font-family: "Bureau-Grot";            src: url("http://localhost:8000/?font=BureauGrot.ttf")          format("truetype"); }
+            @font-face { font-family: "Bureau-Grot-Condensed";  src: url("http://localhost:8000/?font=BureauGrotCondensed.otf") format("opentype"); }
+
+            body {
+                width:      1920px;
+                height:     1080px;
+                overflow:   hidden;
+                background: transparent;
+                padding:    0px;
+                margin:     0px;
+                color:      #FFFFFF;
+                font-family:    "Bureau-Grot";
+                text-transform: uppercase;
+                white-space:    nowrap;
+                letter-spacing: 2px;
+
+                --shadow-color: #221F1F;
+            }
+
+            .absolute { position: absolute; }
+            .fade { transition: opacity 0.5s; transition-timing-function: ease-in-out; }
+            .slide { transition: transform 0.5s; transition-timing-function: ease-in-out; }
+            .fade_slide { transition: opacity 0.5s, transform 0.5s; transition-timing-function: ease-in-out; }
+
+            .background_image {
+                width: 1920px;  height: 1080px;
+                top: 0px;       left: 0px;
+            }
+
+            .tournament_name_location {
+                top: 0px;           left: 16px;
+                width: 1300px;      height: 63px;
+                font-size: 32px;    line-height: 63px;
+                text-align: left;   font-weight: bold;
+            }
+
+            .event_name_location {
+                top: 0px;           right: 16px;
+                width: 620px;       height: 63px;
+                font-size: 32px;    line-height: 63px;
+                text-align: right;  font-weight: bold;
+                opacity: 0;
+            }
+            .event_name_location.fade_out { opacity: 0; }
+            .event_name_location.fade_in { opacity: 1; }
+
+            .tournament_date_location {
+                top: 0px;           right: 16px;
+                width: 620px;       height: 63px;
+                font-size: 32px;    line-height: 63px;
+                text-align: right;  font-weight: bold;
+                opacity: 0;
+            }
+            .tournament_date_location.fade_out { opacity: 0; }
+            .tournament_date_location.fade_in { opacity: 1; }
+
+            .caster_location {
+                bottom: 150px;      right: 16px;
+                opacity: 0;         transform: translate(-10px, 0px);
+            }
+            .caster_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
+            .caster_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .caster_image {
+                width: 32px;        height: 32px;
+                padding-right: 5px;
+                filter: drop-shadow(0px 5px 0px var(--shadow-color));
+            }
+
+            .caster_name_value {
+                font-size: 42px;    line-height: 42px;
+                font-family: "Bureau-Grot-Condensed";
+                letter-spacing: 4px;
+                text-shadow: 3px 3px 0px var(--shadow-color);
+            }
+
+            .caster_social_image {
+                width: 24px;        height: 24px;
+                padding-top: 10px;
+                filter: drop-shadow(1px 1px 0px var(--shadow-color));
+            }
+
+            .c1_name_location {
+                bottom: 116px;      right: 16px;
+                font-size: 32px;    line-height: 32px;
+                text-align: right;  opacity: 0;
+                text-shadow: 2px 2px 0px var(--shadow-color);
+                transform: translate(-10px, 0px);
+            }
+            .c1_name_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
+            .c1_name_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .c1_social_location {
+                bottom: 86px;       right: 16px;
+                font-size: 24px;    line-height: 24px;
+                font-family: "Bureau-Grot-Condensed";
+            }
+
+            .c1_social_1_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
+            .c1_social_1_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
+            .c1_social_1_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+            .c1_social_2_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
+            .c1_social_2_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
+            .c1_social_2_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+            .c1_social_3_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
+            .c1_social_3_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
+            .c1_social_3_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .c2_name_location {
+                bottom: 46px;       right: 16px;
+                font-size: 32px;    line-height: 32px;
+                text-align: right;  opacity: 0;
+                text-shadow: 2px 2px 0px var(--shadow-color);
+                transform: translate(-10px, 0px);
+            }
+            .c2_name_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
+            .c2_name_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .c2_social_location {
+                bottom: 16px;       right: 16px;
+                font-size: 24px;    line-height: 24px;
+                font-family: "Bureau-Grot-Condensed";
+            }
+
+            .c2_social_1_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
+            .c2_social_1_location.fade_out { opacity: 0; transform: translate(10px, 0px); }
+            .c2_social_1_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+            .c2_social_2_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
+            .c2_social_2_location.fade_out { opacity: 0; transform: translate(10px, 0px); }
+            .c2_social_2_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+            .c2_social_3_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
+            .c2_social_3_location.fade_out { opacity: 0; transform: translate(10px, 0px); }
+            .c2_social_3_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .set_name_location {
+                bottom: 16px;       left: 16px;
+                width:  1632px;     height: 72px;
+                font-size: 60px;    line-height: 72px;
+                font-weight: bold;  letter-spacing: 5px;
+                text-align: center;
+                text-shadow: 0px 7px 0px var(--shadow-color), 2px 7px 0px var(--shadow-color), -2px 7px 0px var(--shadow-color);
+                opacity: 0;         transform: translate(0px, 10px);
+            }
+            .set_name_location.fade_out { opacity: 0; transform: translate(0px, 10px); }
+            .set_name_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .p1_name_location {
+                bottom: 16px;       left: 16px;
+                font-size: 60px;    line-height: 72px;
+                text-align: left;   font-family: "Bureau-Grot-Condensed";
+                opacity: 0;         transform: translate(20px, 0px);
+                text-shadow: 5px 5px 0px var(--shadow-color);
+            }
+            .p1_name_location.fade_out { opacity: 0; transform: translate(20px, 0px); }
+            .p1_name_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .p1_hud_location {
+                bottom: 116px;      left: 25px;
+            }
+
+            .p1_score_location {
+                width: 96px;        height: 96px;
+                background-image: url("http://localhost:8000/?image=elements/panel.png");
+                background-size: 100% 100%;
+                background-color: rgba(0, 0, 0, 0);
+                filter: drop-shadow(10px 10px 0px var(--shadow-color));
+                text-align: center; font-family: "Bureau-Grot-Condensed";
+                opacity: 0;         transform: translate(20px, 0px);
+                float: left;
+            }
+            .p1_score_location.fade_out { opacity: 0; transform: translate(20px, 0px); }
+            .p1_score_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .p1_score_value {
+                font-size: 56px;    line-height: 96px;
+                font-weight: bold;  color: var(--shadow-color);
+            }
+
+            .p1_bracket_location {
+                width: 192px;       height: 96px;
+                background-image: url("http://localhost:8000/?image=elements/panel_large.png");
+                background-size: 100% 100%;
+                background-color: rgba(0, 0, 0, 0);
+                filter: drop-shadow(10px 10px 0px var(--shadow-color));
+                text-align: center; font-family: "Bureau-Grot-Condensed";
+                opacity: 0;         transform: translate(20px, 0px);
+                float: left;
+            }
+            .p1_bracket_location.fade_out { opacity: 0; transform: translate(20px, 0px); }
+            .p1_bracket_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .p1_bracket_value {
+                font-size: 56px;    line-height: 96px;
+                font-weight: bold;  color: var(--shadow-color);
+                letter-spacing: 0px;
+            }
+
+            .p2_name_location {
+                bottom: 16px;       right: 267px;
+                font-size: 60px;    line-height: 72px;
+                text-align: right;  font-family: "Bureau-Grot-Condensed";
+                opacity: 0;         transform: translate(-20px, 0px);
+                text-shadow: -5px 5px 0px var(--shadow-color);
+            }
+            .p2_name_location.fade_out { opacity: 0; transform: translate(-20px, 0px); }
+            .p2_name_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .p2_hud_location {
+                bottom: 116px;      right: 281px;
+            }
+
+            .p2_score_location {
+                width: 96px;        height: 96px;
+                background-image: url("http://localhost:8000/?image=elements/panel.png");
+                background-size: 100% 100%;
+                background-color: rgba(0, 0, 0, 0);
+                filter: drop-shadow(10px 10px 0px var(--shadow-color));
+                text-align: center; font-family: "Bureau-Grot-Condensed";
+                opacity: 0;         transform: translate(-20px, 0px) scaleX(-1);
+                float: right;
+            }
+            .p2_score_location.fade_out { opacity: 0; transform: translate(-20px, 0px) scaleX(-1); }
+            .p2_score_location.fade_in { opacity: 1; transform: translate(0px, 0px) scaleX(-1); }
+
+            .p2_score_value {
+                display: inline-block;  margin: 0px;
+                font-size: 56px;    line-height: 96px;
+                font-weight: bold;  color: var(--shadow-color);
+                transform: scaleX(-1);
+            }
+
+            .p2_bracket_location {
+                width: 192px;       height: 96px;
+                background-image: url("http://localhost:8000/?image=elements/panel_large.png");
+                background-size: 100% 100%;
+                background-color: rgba(0, 0, 0, 0);
+                filter: drop-shadow(10px 10px 0px var(--shadow-color));
+                text-align: center; font-family: "Bureau-Grot-Condensed";
+                opacity: 0;         transform: translate(-20px, 0px) scaleX(-1);
+                float: right;
+            }
+            .p2_bracket_location.fade_out { opacity: 0; transform: translate(-20px, 0px) scaleX(-1); }
+            .p2_bracket_location.fade_in { opacity: 1; transform: translate(0px, 0px) scaleX(-1); }
+
+            .p2_bracket_value {
+                display: inline-block;  margin: 0px;
+                font-size: 56px;    line-height: 96px;
+                font-weight: bold;  color: var(--shadow-color);
+                transform: scaleX(-1);  letter-spacing: 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <img        id = "background_image"         class = "absolute background_image"  src = "http://localhost:8000/?image=background_overlay.png">
+        <div        id = "tournament_name_location" class = "absolute tournament_name_location">
+            <span   id = "tournament_name_value"    class = "tournament_name_value"></span>
+        </div>
+        <div        id = "tournament_date_location" class = "absolute fade tournament_date_location">
+            <span   id = "tournament_date_value"    class = "tournament_date_value"></span>
+        </div>
+        <div        id = "event_name_location"      class = "absolute fade event_name_location">
+            <span   id = "event_name_value"         class = "event_name_value"></span>
+        </div>
+        <div        id = "set_name_location"        class = "absolute fade_slide set_name_location">
+            <span   id = "set_name_value"           class = "set_name_value"></span>
+        </div>
+        <div        id = "caster_location"          class = "absolute fade_slide caster_location">
+            <img    id = "caster_image"             class = "caster_image" src = "http://localhost:8000/?image=elements\mic.png">
+            <span   id = "caster_name_value"        class = "caster_name_value">on the mic</span>
+        </div>
+        <span       id = "c1_id_value"              class = "c1_id_value"></span>
+        <div        id = "c1_name_location"         class = "absolute fade_slide c1_name_location">
+            <span   id = "c1_name_value"            class = "c1_name_value"></span>
+        </div>
+        <div        id = "c1_social_1_location"     class = "absolute fade_slide c1_social_location c1_social_1_location">
+            <img    id = "c1_social_1_image"        class = "caster_social_image c1_social_1_image">
+            <span   id = "c1_social_1_value"        class = "c1_social_1_value"></span>
+        </div>
+        <div        id = "c1_social_2_location"     class = "absolute fade_slide c1_social_location c1_social_2_location">
+            <img    id = "c1_social_2_image"        class = "caster_social_image c1_social_2_image">
+            <span   id = "c1_social_2_value"        class = "c1_social_2_value"></span>
+        </div>
+        <div        id = "c1_social_3_location"     class = "absolute fade_slide c1_social_location c1_social_3_location">
+            <img    id = "c1_social_3_image"        class = "caster_social_image c1_social_3_image">
+            <span   id = "c1_social_3_value"        class = "c1_social_3_value"></span>
+        </div>
+        <span       id = "c2_id_value"              class = "c2_id_value"></span>
+        <div        id = "c2_name_location"         class = "absolute fade_slide c2_name_location">
+            <span   id = "c2_name_value"            class = "c2_name_value"></span>
+        </div>
+        <div        id = "c2_social_1_location"     class = "absolute fade_slide c2_social_location c2_social_1_location">
+            <img    id = "c2_social_1_image"        class = "caster_social_image c2_social_1_image">
+            <span   id = "c2_social_1_value"        class = "c2_social_1_value"></span>
+        </div>
+        <div        id = "c2_social_2_location"     class = "absolute fade_slide c2_social_location c2_social_2_location">
+            <img    id = "c2_social_2_image"        class = "caster_social_image c2_social_2_image">
+            <span   id = "c2_social_2_value"        class = "c2_social_2_value"></span>
+        </div>
+        <div        id = "c2_social_3_location"     class = "absolute fade_slide c2_social_location c2_social_3_location">
+            <img    id = "c2_social_3_image"        class = "caster_social_image c2_social_3_image">
+            <span   id = "c2_social_3_value"        class = "c2_social_3_value"></span>
+        </div>
+        <span       id = "p1_id_value"              class = "p1_id_value"></span>
+        <div        id = "p1_name_location"         class = "absolute fade_slide p1_name_location">
+            <span   id = "p1_name_value"            class = "p1_name_value"></span>
+        </div>
+        <div        id = "p1_hud_location"          class = "absolute p1_hud_location">
+            <div        id = "p1_score_location"    class = "fade_slide p1_score_location">
+                <span   id = "p1_score_value"       class = "p1_score_value"></span>
+            </div>
+            <div        id = "p1_bracket_location"  class = "fade_slide p1_bracket_location">
+                <span   id = "p1_bracket_value"     class = "p1_bracket_value"></span>
+            </div>
+        </div>
+        <span       id = "p2_id_value"              class = "p2_id_value"></span>
+        <div        id = "p2_name_location"         class = "absolute fade_slide p2_name_location">
+            <span   id = "p2_name_value"            class = "p2_name_value"></span>
+        </div>
+        <div        id = "p2_hud_location"          class = "absolute p2_hud_location">
+            <div        id = "p2_score_location"    class = "fade_slide p2_score_location">
+                <span   id = "p2_score_value"       class = "p2_score_value"></span>
+            </div>
+            <div        id = "p2_bracket_location"  class = "fade_slide p2_bracket_location">
+                <span   id = "p2_bracket_value"     class = "p2_bracket_value"></span>
+            </div>
+        </div>
+    </body>
+</html>
