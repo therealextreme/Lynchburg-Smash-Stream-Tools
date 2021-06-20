@@ -55,6 +55,14 @@
                     }
                 });
             }
+            
+            function get_player(id) {
+                for (i = 0; i < tournament["participants"].length; i++) {
+                    if (tournament["participants"][i]["id"] == id) {
+                        return tournament["participants"][i];
+                    }
+                }
+            }
 
             function update_stream() {
 
@@ -71,28 +79,32 @@
                 let c2_socials = [];
                 let upcoming_p1_name = "";
                 let upcoming_p2_name = "";
-                for (p of tournament["participants"]) {
-                    if (p["id"] == document.getElementById("p1_user").value) {
-                        p1_name = p["tag"];
+                tournament["events"].forEach(async function(item, i) {
+                    if (item["name"] == document.getElementById("event_name").value) {
+                        item["entrants"].forEach(async function(p, i2) {
+                            if (p["id"] == document.getElementById("p1_user").value) {
+                                p1_name = p["tag"];
+                            }
+                            if (p["id"] == document.getElementById("p2_user").value) {
+                                p2_name = p["tag"];
+                            }
+                            if (p["id"] == document.getElementById("c1_user").value) {
+                                c1_name = p["tag"];
+                                c1_socials = p["socials"];
+                            }
+                            if (p["id"] == document.getElementById("c2_user").value) {
+                                c2_name = p["tag"];
+                                c2_socials = p["socials"];
+                            }
+                            if (p["id"] == document.getElementById("upcoming_p1_user").value) {
+                                upcoming_p1_name = p["tag"];
+                            }
+                            if (p["id"] == document.getElementById("upcoming_p2_user").value) {
+                                upcoming_p2_name = p["tag"];
+                            }
+                        });
                     }
-                    if (p["id"] == document.getElementById("p2_user").value) {
-                        p2_name = p["tag"];
-                    }
-                    if (p["id"] == document.getElementById("c1_user").value) {
-                        c1_name = p["tag"];
-                        c1_socials = p["socials"];
-                    }
-                    if (p["id"] == document.getElementById("c2_user").value) {
-                        c2_name = p["tag"];
-                        c2_socials = p["socials"];
-                    }
-                    if (p["id"] == document.getElementById("upcoming_p1_user").value) {
-                        upcoming_p1_name = p["tag"];
-                    }
-                    if (p["id"] == document.getElementById("upcoming_p2_user").value) {
-                        upcoming_p2_name = p["tag"];
-                    }
-                }
+                });
                 var set_name = document.getElementById("set_name").value;
                 if (document.getElementById("set_name").value == "Round")               { set_name += " " + document.getElementById("round_number").value; }
                 else if (document.getElementById("set_name").value == "Winners Round")  { set_name += " " + document.getElementById("round_number").value; }
@@ -144,17 +156,17 @@
                 c1_user.options.length = 1;
                 var c2_user = document.getElementById("c2_user");
                 c2_user.options.length = 1;
-                tournament["participants"].forEach(async function(item, i) {
-                        if (item["name"] != null && item["name"] != "") {
-                            c1_user.options.add(new Option(item["tag"] + " - " + item["name"], item["id"], false));
-                            c2_user.options.add(new Option(item["tag"] + " - " + item["name"], item["id"], false));
-                        }
-                        else {
-                            c1_user.options.add(new Option(item["tag"], item["id"], false));
-                            c2_user.options.add(new Option(item["tag"], item["id"], false));
-                        }
+
+                tournament["participants"].forEach(async function(p, i) {
+                    if (p["name"] != null && p["name"] != "") {
+                        c1_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
+                        c2_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
                     }
-                );
+                    else {
+                        c1_user.options.add(new Option(p["tag"], p["id"], false));
+                        c2_user.options.add(new Option(p["tag"], p["id"], false));
+                    }
+                });
                 document.getElementById("tournament_name").value = tournament["name"];
                 document.getElementById("tournament_date").value = tournament["date"];
                 var event_name = document.getElementById("event_name");
@@ -243,6 +255,15 @@
                 const p2_user = document.getElementById("upcoming_p2_user").value;
                 document.getElementById("upcoming_p1_user").value = p2_user;
                 document.getElementById("upcoming_p2_user").value = p1_user;
+            }
+
+            async function move_up_upcoming() {
+                const p1_user = document.getElementById("upcoming_p1_user").value;
+                const p2_user = document.getElementById("upcoming_p2_user").value;
+                document.getElementById("p1_user").value = p1_user;
+                document.getElementById("p2_user").value = p2_user;
+                document.getElementById("upcoming_p1_user").value = "";
+                document.getElementById("upcoming_p2_user").value = "";
             }
         </script>
         <style>
@@ -352,7 +373,6 @@
                 background: #CC4444;
             }
 
-            .round_number { opacity: 0; }
             .p1_bracket { opacity: 0; }
             .p2_bracket { opacity: 0; }
         </style>
@@ -378,22 +398,6 @@
                     <select                 id="event_name"         name="event_name"       onchange="event_update();">
                         <option selected    value="">Event Name</option>
                     </select>
-                    <select                 id="set_name"           name="set_name"         onchange="set_update();"    style="min-width: 168px; max-width: 168px;">
-                        <option selected    value="">Set Name</option>
-                        <option             value="Friendlies">Friendlies</option>
-                        <option             value="Round">Round X</option>
-                        <option             value="Losers Round">Losers Round X</option>
-                        <option             value="Losers Quarters">Losers Quarters</option>
-                        <option             value="Losers Semis">Losers Semis</option>
-                        <option             value="Losers Finals">Losers Finals</option>
-                        <option             value="Winners Round">Winners Round X</option>
-                        <option             value="Winners Quarters">Winners Quarters</option>
-                        <option             value="Winners Semis">Winners Semis</option>
-                        <option             value="Winners Finals">Winners Finals</option>
-                        <option             value="Grand Finals">Grand Finals</option>
-                        <option             value="Grand Finals Reset">Grand Finals Reset</option>
-                    </select>
-                    <input type="text"      id="round_number"       name="round_number"     placeholder="Round Number" class="round_number">
                 </div>
             </fieldset>
         </div>
@@ -405,9 +409,9 @@
                     <select                 id="p1_user"        name="p1_user">
                         <option selected    value="none">None</option>
                     </select>
-                    <button type="button"   class="left_button" onclick="this.parentNode.querySelector('[type=number]').stepDown();">-</button>
+                    <button type="button"   class="left_button" onclick="this.parentNode.getElementById(p1_score).stepDown();">-</button>
                     <input  type="number"   id="p1_score"       name="p1_score"     value="0">
-                    <button type="button"   class="right_button"onclick="this.parentNode.querySelector('[type=number]').stepUp();">+</button>
+                    <button type="button"   class="right_button"onclick="this.parentNode.getElementById(p1_score).stepUp();">+</button>
                     <div class="p1_bracket" id="p1_bracket_div_1">
                         <input type="radio" id="p1_bracket_1" name="p1_bracket" value="Winners" checked>
                         <label for="p1_bracket_1" style="border-left: 0px; border-right: 0px;">
@@ -433,12 +437,72 @@
                             <h3>[L]</h3>
                         </label>
                     </div>
-                    <button type="button"   class="left_button" onclick="this.parentNode.querySelector('[type=number]').stepDown();">-</button>
+                    <button type="button"   class="left_button" onclick="this.parentNode.getElementById(p2_score).stepDown();">-</button>
                     <input  type="number"   id="p2_score"       name="p2_score"     value="0">
-                    <button type="button"   class="right_button"onclick="this.parentNode.querySelector('[type=number]').stepUp();">+</button>
+                    <button type="button"   class="right_button"onclick="this.parentNode.getElementById(p2_score).stepUp();">+</button>
                     <select                 id="p2_user"        name="p2_user">
                         <option selected    value="none">None</option>
                     </select>
+                </div>
+                <div>
+                    <div style="margin: auto;">
+                        <select                 id="set_name"           name="set_name"         onchange="set_update();"    style="min-width: 168px; max-width: 168px;">
+                            <option selected    value="">Set Name</option>
+                            <option             value="Friendlies">Friendlies</option>
+                            <option             value="Round">Round X</option>
+                            <option             value="Losers Round">Losers Round X</option>
+                            <option             value="Losers Quarters">Losers Quarters</option>
+                            <option             value="Losers Semis">Losers Semis</option>
+                            <option             value="Losers Finals">Losers Finals</option>
+                            <option             value="Winners Round">Winners Round X</option>
+                            <option             value="Winners Quarters">Winners Quarters</option>
+                            <option             value="Winners Semis">Winners Semis</option>
+                            <option             value="Winners Finals">Winners Finals</option>
+                            <option             value="Grand Finals">Grand Finals</option>
+                            <option             value="Grand Finals Reset">Grand Finals Reset</option>
+                        </select>
+                        <input type="text"      id="round_number"       name="round_number"     placeholder="#" style="opacity: 0; min-width: 15px; width: 15px; max-width: 15px;">
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+        <div class="break"></div>
+        <div>
+            <fieldset>
+                <legend>Upcoming Set</legend>
+                <div>
+                    <div style="margin: auto; width: 100px;">
+                        <button id="move_up_upcoming" onclick="move_up_upcoming();" style="max-width: none; width: 100%;">Move Up</button>
+                    </div>
+                </div>
+                <div>
+                    <select                 id="upcoming_p1_user"   name="upcoming_p1_user">
+                        <option selected    value="none">None</option>
+                    </select>
+                    <button id="swap_upcoming_players"  onclick="swap_upcoming_players();"  style="max-width: none; width: 100px; margin-left: 16px; margin-right: 16px;">Swap</button>
+                    <select                 id="upcoming_p2_user"   name="upcoming_p2_user">
+                        <option selected    value="none">None</option>
+                    </select>
+                </div>
+                <div>
+                    <div style="margin: auto;">
+                        <select                 id="upcoming_set_name"  name="upcoming_set_name"    onchange="upcoming_set_update();"   style="min-width: 168px; max-width: 168px;">
+                            <option selected    value="">Upcoming Set Name</option>
+                            <option             value="Friendlies">Friendlies</option>
+                            <option             value="Round">Round X</option>
+                            <option             value="Losers Round">Losers Round X</option>
+                            <option             value="Losers Quarters">Losers Quarters</option>
+                            <option             value="Losers Semis">Losers Semis</option>
+                            <option             value="Losers Finals">Losers Finals</option>
+                            <option             value="Winners Round">Winners Round X</option>
+                            <option             value="Winners Quarters">Winners Quarters</option>
+                            <option             value="Winners Semis">Winners Semis</option>
+                            <option             value="Winners Finals">Winners Finals</option>
+                            <option             value="Grand Finals">Grand Finals</option>
+                            <option             value="Grand Finals Reset">Grand Finals Reset</option>
+                        </select>
+                        <input type="text"      id="upcoming_round_number"       name="upcoming_round_number"     placeholder="#" style="opacity: 0; min-width: 15px; width: 15px; max-width: 15px;">
+                    </div>
                 </div>
             </fieldset>
         </div>
@@ -454,37 +518,6 @@
                     <select                 id="c2_user"        name="c2_user">
                         <option selected    value="none">None</option>
                     </select>
-                </div>
-            </fieldset>
-        </div>
-        <div class="break"></div>
-        <div>
-            <fieldset>
-                <legend>Upcoming Set</legend>
-                <div>
-                    <select                 id="upcoming_p1_user"   name="upcoming_p1_user">
-                        <option selected    value="none">None</option>
-                    </select>
-                    <button id="swap_upcoming_players"  onclick="swap_upcoming_players();"  style="max-width: none; width: 100px; margin-left: 16px; margin-right: 16px;">Swap</button>
-                    <select                 id="upcoming_p2_user"   name="upcoming_p2_user">
-                        <option selected    value="none">None</option>
-                    </select>
-                    <select                 id="upcoming_set_name"  name="upcoming_set_name"    onchange="upcoming_set_update();"   style="min-width: 168px; max-width: 168px;">
-                        <option selected    value="">Upcoming Set Name</option>
-                        <option             value="Friendlies">Friendlies</option>
-                        <option             value="Round">Round X</option>
-                        <option             value="Losers Round">Losers Round X</option>
-                        <option             value="Losers Quarters">Losers Quarters</option>
-                        <option             value="Losers Semis">Losers Semis</option>
-                        <option             value="Losers Finals">Losers Finals</option>
-                        <option             value="Winners Round">Winners Round X</option>
-                        <option             value="Winners Quarters">Winners Quarters</option>
-                        <option             value="Winners Semis">Winners Semis</option>
-                        <option             value="Winners Finals">Winners Finals</option>
-                        <option             value="Grand Finals">Grand Finals</option>
-                        <option             value="Grand Finals Reset">Grand Finals Reset</option>
-                    </select>
-                    <input type="text"      id="upcoming_round_number"       name="upcoming_round_number"     placeholder="Upcoming Round Number" class="round_number">
                 </div>
             </fieldset>
         </div>
