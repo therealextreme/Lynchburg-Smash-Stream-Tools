@@ -9,13 +9,13 @@
 
             function init() {
                 async function main() {
-                    const game = await get_info("game");
+                    const game = await get_info();
                     parse_data(game);
                 }
                 main();
                 setInterval( () => {
                     main();
-                }, 15);
+                }, 500);
             }
 
             function parse_data(game) {
@@ -57,53 +57,53 @@
                     document.getElementById("c1_name_value").textContent =          c1_name;
                     try {
                         document.getElementById("c1_social_1_value").textContent =  c1_socials[0]["externalUsername"];
-                        document.getElementById("c1_social_1_image").src =          "http://localhost:8000/?image=socials/" + c1_socials[0]["type"] + ".png";
+                        document.getElementById("c1_social_1_image").src =          "../../img/socials/" + c1_socials[0]["type"] + ".png";
                     }
                     catch(err) {
                         document.getElementById("c1_social_1_value").textContent =  "";
-                        document.getElementById("c1_social_1_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                        document.getElementById("c1_social_1_image").src =          "../../img/socials/undefined.png";
                     }
                     try {
                         document.getElementById("c1_social_2_value").textContent =  c1_socials[1]["externalUsername"];
-                        document.getElementById("c1_social_2_image").src =          "http://localhost:8000/?image=socials/" + c1_socials[1]["type"] + ".png";
+                        document.getElementById("c1_social_2_image").src =          "../../img/socials/" + c1_socials[1]["type"] + ".png";
                     }
                     catch(err) {
                         document.getElementById("c1_social_2_value").textContent =  "";
-                        document.getElementById("c1_social_2_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                        document.getElementById("c1_social_2_image").src =          "../../img/socials/undefined.png";
                     }
                     try {
                         document.getElementById("c1_social_3_value").textContent =  c1_socials[2]["externalUsername"];
-                        document.getElementById("c1_social_3_image").src =          "http://localhost:8000/?image=socials/" + c1_socials[2]["type"] + ".png";
+                        document.getElementById("c1_social_3_image").src =          "../../img/socials/" + c1_socials[2]["type"] + ".png";
                     }
                     catch(err) {
                         document.getElementById("c1_social_3_value").textContent =  "";
-                        document.getElementById("c1_social_3_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                        document.getElementById("c1_social_3_image").src =          "../../img/socials/undefined.png";
                     }
                     document.getElementById("c2_id_value").textContent =            c2_id;
                     document.getElementById("c2_name_value").textContent =          c2_name;
                     try {
                         document.getElementById("c2_social_1_value").textContent =  c2_socials[0]["externalUsername"];
-                        document.getElementById("c2_social_1_image").src =          "http://localhost:8000/?image=socials/" + c2_socials[0]["type"] + ".png";
+                        document.getElementById("c2_social_1_image").src =          "../../img/socials/" + c2_socials[0]["type"] + ".png";
                     }
                     catch(err) {
                         document.getElementById("c2_social_1_value").textContent =  "";
-                        document.getElementById("c2_social_1_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                        document.getElementById("c2_social_1_image").src =          "../../img/socials/undefined.png";
                     }
                     try {
                         document.getElementById("c2_social_2_value").textContent =  c2_socials[1]["externalUsername"];
-                        document.getElementById("c2_social_2_image").src =          "http://localhost:8000/?image=socials/" + c2_socials[1]["type"] + ".png";
+                        document.getElementById("c2_social_2_image").src =          "../../img/socials/" + c2_socials[1]["type"] + ".png";
                     }
                     catch(err) {
                         document.getElementById("c2_social_2_value").textContent =  "";
-                        document.getElementById("c2_social_2_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                        document.getElementById("c2_social_2_image").src =          "../../img/socials/undefined.png";
                     }
                     try {
                         document.getElementById("c2_social_3_value").textContent =  c2_socials[2]["externalUsername"];
-                        document.getElementById("c2_social_3_image").src =          "http://localhost:8000/?image=socials/" + c2_socials[2]["type"] + ".png";
+                        document.getElementById("c2_social_3_image").src =          "../../img/socials/" + c2_socials[2]["type"] + ".png";
                     }
                     catch(err) {
                         document.getElementById("c2_social_3_value").textContent =  "";
-                        document.getElementById("c2_social_3_image").src =          "http://localhost:8000/?image=socials/undefined.png";
+                        document.getElementById("c2_social_3_image").src =          "../../img/socials/undefined.png";
                     }
                     document.getElementById("tournament_name_value").textContent =  tournament_name;
                     document.getElementById("tournament_date_value").textContent =  tournament_date;
@@ -300,7 +300,7 @@
                 return new Promise(function(resolve) {
                     const request = new XMLHttpRequest();
                     request.addEventListener("load", request_listener);
-                    request.open("GET", "http://localhost:8000/?info=" + file);
+                    request.open("GET", "http://localhost:8000/info/");
                     request.send();
 
                     function request_listener () {
@@ -310,8 +310,8 @@
             }
         </script>
         <style>
-            @font-face { font-family: "Bureau-Grot";            src: url("http://localhost:8000/?font=BureauGrot.ttf")          format("truetype"); }
-            @font-face { font-family: "Bureau-Grot-Condensed";  src: url("http://localhost:8000/?font=BureauGrotCondensed.otf") format("opentype"); }
+            @font-face { font-family: "Bureau-Grot";            src: url("../../fonts/BureauGrot.ttf") format("truetype"); }
+            @font-face { font-family: "Bureau-Grot-Condensed";  src: url("../../fonts/BureauGrotCondensed.otf") format("opentype"); }
 
             body {
                 width:      1920px;
@@ -435,13 +435,13 @@
             }
 
             .c2_social_1_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
-            .c2_social_1_location.fade_out { opacity: 0; transform: translate(10px, 0px); }
+            .c2_social_1_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
             .c2_social_1_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
             .c2_social_2_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
-            .c2_social_2_location.fade_out { opacity: 0; transform: translate(10px, 0px); }
+            .c2_social_2_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
             .c2_social_2_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
             .c2_social_3_location { opacity: 0; transform: translate(-10px, 0px); text-shadow: 1px 1px 0px var(--shadow-color); }
-            .c2_social_3_location.fade_out { opacity: 0; transform: translate(10px, 0px); }
+            .c2_social_3_location.fade_out { opacity: 0; transform: translate(-10px, 0px); }
             .c2_social_3_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
 
             .set_name_location {
@@ -472,7 +472,7 @@
 
             .p1_score_location {
                 width: 96px;        height: 96px;
-                background-image: url("http://localhost:8000/?image=elements/panel.png");
+                background-image: url("../../img/elements/panel.png");
                 background-size: 100% 100%;
                 background-color: rgba(0, 0, 0, 0);
                 filter: drop-shadow(10px 10px 0px var(--shadow-color));
@@ -490,7 +490,7 @@
 
             .p1_bracket_location {
                 width: 192px;       height: 96px;
-                background-image: url("http://localhost:8000/?image=elements/panel_large.png");
+                background-image: url("../../img/elements/panel_large.png");
                 background-size: 100% 100%;
                 background-color: rgba(0, 0, 0, 0);
                 filter: drop-shadow(10px 10px 0px var(--shadow-color));
@@ -523,7 +523,7 @@
 
             .p2_score_location {
                 width: 96px;        height: 96px;
-                background-image: url("http://localhost:8000/?image=elements/panel.png");
+                background-image: url("../../img/elements/panel.png");
                 background-size: 100% 100%;
                 background-color: rgba(0, 0, 0, 0);
                 filter: drop-shadow(10px 10px 0px var(--shadow-color));
@@ -543,7 +543,7 @@
 
             .p2_bracket_location {
                 width: 192px;       height: 96px;
-                background-image: url("http://localhost:8000/?image=elements/panel_large.png");
+                background-image: url("../../img/elements/panel_large.png");
                 background-size: 100% 100%;
                 background-color: rgba(0, 0, 0, 0);
                 filter: drop-shadow(10px 10px 0px var(--shadow-color));
@@ -563,7 +563,7 @@
         </style>
     </head>
     <body>
-        <img        id = "background_image"         class = "absolute background_image"  src = "http://localhost:8000/?image=background_overlay.png">
+        <img        id = "background_image"         class = "absolute background_image"  src = "../../img/background_overlay.png">
         <div        id = "tournament_name_location" class = "absolute tournament_name_location">
             <span   id = "tournament_name_value"    class = "tournament_name_value"></span>
         </div>
@@ -577,7 +577,7 @@
             <span   id = "set_name_value"           class = "set_name_value"></span>
         </div>
         <div        id = "caster_location"          class = "absolute fade_slide caster_location">
-            <img    id = "caster_image"             class = "caster_image" src = "http://localhost:8000/?image=elements\mic.png">
+            <img    id = "caster_image"             class = "caster_image" src = "../../img/elements\mic.png">
             <span   id = "caster_name_value"        class = "caster_name_value">on the mic</span>
         </div>
         <span       id = "c1_id_value"              class = "c1_id_value"></span>
