@@ -14,9 +14,11 @@ Open a command line to the root of the repository and enter these commands:
     npm install
     node server.js
 
-This will start It will provide a list of urls, which are used for overlays and control. This window must be left running as long as you are using the overlays.
+After running once you can just use `node server.js` to run the overlay.
 
-Go into OBS or Streamlabs and set up a new browser source. Check `Local` and set the source to whatever location the executable gives you.
+It will provide a list of urls, which are used for overlays and control. This window must be left running as long as you are using the overlays.
+
+Go into OBS or Streamlabs and set up a new browser source. Check `Local file` and set the source to whatever location the executable gives you.
 
 Set the width to 1920 (1280 if streaming in 720p) and the height to 1080 (720 if streaming in 720p).
 
@@ -24,9 +26,8 @@ Check `Shutdown Source When Not Visible` and `Refresh Broswer Source When Scene 
 
 If the overlay looks small or too big, right click the source -> Transform -> Edit Transform. Change the width and height value to match your stream dimensions.
 
-
-To access the tool, go to the address on the executable or http://localhost:8000/tool/.
-###### Currently the tool's smash.gg integration does not work. Use the offline tool at http://localhost:8000/tool/offline/ instead.
+~~To access the tool, go to the address on the executable or http://localhost:8000/tool/.~~ This version is unavailable, use the offline version instead.
+To access the offline tool, go to the address on the executable or http://localhost:8000/tool/offline/.
 
 ## Various Locations (for 1080p)
 ### Game Overlay
