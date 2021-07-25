@@ -50,8 +50,8 @@ app.post("/", function(request, response) {
 // start server
 app.listen(PORT, () => {
     console.log("Listening at localhost:" + PORT + "...\n");
-    console.log("Stream Tool:         http:\\\\" + ip.address() + ":" + PORT + "\\tool\\");
-    console.log("Offline Stream Tool: http:\\\\" + ip.address() + ":" + PORT + "\\tool\\offline\\\n");
+    //console.log("Stream Tool:         http://" + ip.address() + ":" + PORT + "/tool/");
+    console.log("Offline Stream Tool: http://" + ip.address() + ":" + PORT + "/tool/offline/\n");
     console.log("Game Overlay:        " + process.cwd() + "\\assets\\overlays\\game\\index.html");
     console.log("Transition:          " + process.cwd() + "\\assets\\overlays\\transition\\index.html");
 });
