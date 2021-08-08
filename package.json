@@ -10,6 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
+    "graphql": "^15.5.1",
+    "graphql-request": "^3.5.0",
     "ip": "^1.1.5"
   }
 }

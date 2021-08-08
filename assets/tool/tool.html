@@ -22,11 +22,16 @@
             const obs = new OBSWebSocket();
             let tournament = {};
 
-            window.onload = init;
+            window.onload = init_2;
+
+            async function init_2() {
+                document.getElementById("tournament_selected").addEventListener("click", init);
+            }
 
             async function init() {
 
                 document.getElementById("form").action = "http://" + ip;
+                document.getElementById("form_tournament").action = "http://" + ip + "/tournament";
 
                 await tournament_selected();
 
@@ -144,29 +149,15 @@
             }
 
             async function tournament_selected() {
-                //let json_file = {
-                //    "tournament_slug": document.getElementById("tournament_slug").value
-                //};
-                tournament = {
-                    "name": "Flame Choke 12",
-                    "date": "6/20/21",
-                    "participants": [
-                        { "id": "f07f7d05", "name": "Sean Mapes",       "tag": "PyroPM",    "socials": [ { "externalUsername": "PyroPM#8822", "type": "DISCORD" }, { "externalUsername": "PyroPM", "type": "TWITTER" }, { "externalUsername": "PyroPM", "type": "TWITCH" } ] },
-                        { "id": "43fe737c", "name": "Lindsay Nemeth",   "tag": "Kawa",      "socials": [] },
-                        { "id": "41c40491", "name": "Jonathan Hiley",   "tag": "J-Hi",      "socials": [ { "externalUsername": "J-Hi#4409", "type": "DISCORD" }, { "externalUsername": "JHi_SYG", "type": "TWITTER" } ] }
-                    ],
-                    "events": [
-                        {
-                            "name": "Project M Singles",
-                            "entrants": [
-                                "f07f7d05",
-                                "43fe737c",
-                                "41c40491"
-                            ]
-                        }
-                    ]
-                };
-                //tournament = await get_file("http://" + ip + "/?tournament=" + JSON.stringify(json_file));
+                tournament = await get_file("http://" + ip + "/tournament");
+                document.getElementById("tournament_name").value = tournament["name"];
+                document.getElementById("tournament_date").value = tournament["date"];
+                var event_name = document.getElementById("event_name");
+                event_name.options.length = 1;
+                tournament["events"].forEach(async function(item, i) {
+                    event_name.options.add(new Option(item["name"], item["name"], false));
+                });
+
                 var c1_user = document.getElementById("c1_user");
                 c1_user.options.length = 1;
                 var c2_user = document.getElementById("c2_user");
@@ -182,14 +173,8 @@
                         c2_user.options.add(new Option(p["tag"], p["id"], false));
                     }
                 });
-                document.getElementById("tournament_name").value = tournament["name"];
-                document.getElementById("tournament_date").value = tournament["date"];
-                var event_name = document.getElementById("event_name");
-                event_name.options.length = 1;
-                tournament["events"].forEach(async function(item, i) {
-                    event_name.options.add(new Option(item["name"], item["name"], false));
-                });
-                //document.getElementById("myModal").style.display = "none";
+                document.getElementById("myModal").style.display = "none";
+                console.log(tournament);
             }
 
             async function event_update() {
@@ -204,7 +189,7 @@
                 tournament["events"].forEach(async function(item, i) {
                     if (item["name"] == document.getElementById("event_name").value) {
                         item["entrants"].forEach(async function(item2, i2) {
-                            var p = await get_player(item2);
+                            var p = item2
                             if (p["name"] != null && p["name"] != "") {
                                 p1_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
                                 p2_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
@@ -528,18 +513,20 @@
     </head>
     <body>
         <iframe name="dummy" id="dummy" style="display: none;"></iframe>
-        <form id="form" action="" method="POST" target="dummy">
-            <!--<div id="myModal" class="modal">
+        <form id="form_tournament" action="/tournament" method="POST" target="dummy">
+            <div id="myModal" class="modal">
                 <div class="modal-content">
                     <fieldset>
                         <legend>Tournament</legend>
                         <div>
                             <input type="text"      id="tournament_slug"    name="tournament_slug"  placeholder="Tournament Slug">
-                            <button id="tournament_selected" onclick="tournament_selected();">Submit</button>
+                            <button id="tournament_selected">Submit</button>
                         </div>
                     </fieldset>
                 </div>
-            </div>-->
+            </div>
+        </form>
+        <form id="form" action="" method="POST" target="dummy">
             <div>
                 <fieldset>
                     <legend>Tournament</legend>

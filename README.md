@@ -26,8 +26,11 @@ Check `Shutdown Source When Not Visible` and `Refresh Broswer Source When Scene 
 
 If the overlay looks small or too big, right click the source -> Transform -> Edit Transform. Change the width and height value to match your stream dimensions.
 
-~~To access the tool, go to the address on the executable or http://localhost:8000/tool/.~~ This version is unavailable, use the offline version instead.
-To access the offline tool, go to the address on the executable or http://localhost:8000/tool/offline/.
+To access the tool, go to the address on the executable or http://localhost:8000/tool/.
+
+This version uses smash.gg integration, so if your tournament doesn't use smash.gg, you can use the alternate version of the tool.
+
+To access the alternate tool, go to the address on the executable or http://localhost:8000/tool/alt/.
 
 ## Various Locations (for 1080p)
 ### Game Overlay
