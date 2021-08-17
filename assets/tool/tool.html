@@ -21,19 +21,18 @@
             ip = ip.replace("/tool/","");
             const obs = new OBSWebSocket();
             let tournament = {};
+            let tournament_info = {};
 
-            window.onload = init_2;
+            window.onload = init;
 
-            async function init_2() {
-                document.getElementById("tournament_selected").addEventListener("click", init);
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
             }
 
             async function init() {
 
                 document.getElementById("form").action = "http://" + ip;
                 document.getElementById("form_tournament").action = "http://" + ip + "/tournament";
-
-                await tournament_selected();
 
                 document.getElementById("p1_user").addEventListener("change", p1_user_update);
                 document.getElementById("p2_user").addEventListener("change", p2_user_update);
@@ -55,7 +54,15 @@
                 document.getElementById("swap_casters").addEventListener("click", swap_casters);
                 document.getElementById("move_up_upcoming").addEventListener("click", move_up_upcoming);
 
-                let tournament_info = await get_file("http://" + ip + "/info");
+                document.getElementById("tournament_selected").addEventListener("click", tournament_selected);
+
+                tournament = await get_file("http://" + ip + "/tournament");
+                tournament_info = await get_file("http://" + ip + "/info");
+                console.log(tournament);
+                console.log(tournament_info);
+                document.getElementById("tournament_name").value = tournament["name"];
+                document.getElementById("tournament_date").value = tournament["date"];
+                document.getElementById("tournament_slug").value = tournament["slug"];
                 for (key in tournament_info) {
                     try {
                         if (key.includes("bracket")) {
@@ -112,12 +119,37 @@
                 } catch(err) {
                     console.log("OBS instance at " + ip.replace("8000", "4444") + " not found. Scene switcher will not be available until page is refreshed with an instance of OBS active.");
                 }
+
+                var event_name = document.getElementById("event_name");
+                event_name.options.length = 1;
+                tournament["events"].forEach(async function(item, i) {
+                    event_name.options.add(new Option(item["name"], item["name"], false));
+                });
+                event_name.value = tournament_info["event_name"];
+
+                var c1_user = document.getElementById("c1_user");
+                c1_user.options.length = 1;
+                var c2_user = document.getElementById("c2_user");
+                c2_user.options.length = 1;
+
+                tournament["participants"].forEach(async function(p, i) {
+                    if (p["name"] != null && p["name"] != "") {
+                        c1_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
+                        c2_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
+                    }
+                    else {
+                        c1_user.options.add(new Option(p["tag"], p["id"], false));
+                        c2_user.options.add(new Option(p["tag"], p["id"], false));
+                    }
+                });
                 await event_update();
                 if (document.getElementById("event_name").value != "") {
                     document.getElementById("p1_user").value = tournament_info["p1_user"];
                     document.getElementById("p2_user").value = tournament_info["p2_user"];
                     document.getElementById("upcoming_p1_user").value = tournament_info["upcoming_p1_user"];
                     document.getElementById("upcoming_p2_user").value = tournament_info["upcoming_p2_user"];
+                    document.getElementById("c1_user").value = tournament_info["c1_user"];
+                    document.getElementById("c2_user").value = tournament_info["c2_user"];
                     p1_user_update();
                     p2_user_update();
                     upcoming_p1_user_update();
@@ -149,7 +181,9 @@
             }
 
             async function tournament_selected() {
+                await sleep(5000);
                 tournament = await get_file("http://" + ip + "/tournament");
+                console.log(tournament);
                 document.getElementById("tournament_name").value = tournament["name"];
                 document.getElementById("tournament_date").value = tournament["date"];
                 var event_name = document.getElementById("event_name");
@@ -173,11 +207,9 @@
                         c2_user.options.add(new Option(p["tag"], p["id"], false));
                     }
                 });
-                document.getElementById("myModal").style.display = "none";
-                console.log(tournament);
             }
 
-            async function event_update() {
+            function event_update() {
                 var p1_user = document.getElementById("p1_user");
                 p1_user.options.length = 1;
                 var p2_user = document.getElementById("p2_user");
@@ -186,22 +218,26 @@
                 upcoming_p1_user.options.length = 1;
                 var upcoming_p2_user = document.getElementById("upcoming_p2_user");
                 upcoming_p2_user.options.length = 1;
-                tournament["events"].forEach(async function(item, i) {
+                tournament["events"].forEach(function(item, i) {
                     if (item["name"] == document.getElementById("event_name").value) {
-                        item["entrants"].forEach(async function(item2, i2) {
-                            var p = item2
-                            if (p["name"] != null && p["name"] != "") {
-                                p1_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
-                                p2_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
-                                upcoming_p1_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
-                                upcoming_p2_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
-                            }
-                            else {
-                                p1_user.options.add(new Option(p["tag"], p["id"], false));
-                                p2_user.options.add(new Option(p["tag"], p["id"], false));
-                                upcoming_p1_user.options.add(new Option(p["tag"], p["id"], false));
-                                upcoming_p2_user.options.add(new Option(p["tag"], p["id"], false));
-                            }
+                        tournament["participants"].forEach(async function(p, i2) {
+                            item["entrants"].forEach(async function(p2, i3) {
+                                if (p2 == p["id"]) {
+                                    if (p["name"] != null && p["name"] != "") {
+                                        p1_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
+                                        p2_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
+                                        upcoming_p1_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
+                                        upcoming_p2_user.options.add(new Option(p["tag"] + " - " + p["name"], p["id"], false));
+                                    }
+                                    else {
+                                        p1_user.options.add(new Option(p["tag"], p["id"], false));
+                                        p2_user.options.add(new Option(p["tag"], p["id"], false));
+                                        upcoming_p1_user.options.add(new Option(p["tag"], p["id"], false));
+                                        upcoming_p2_user.options.add(new Option(p["tag"], p["id"], false));
+                                    }
+                                    console.log(p["tag"] + " - " + p["name"] + " / " + p["id"]);
+                                }
+                            });
                         });
                     }
                 });
@@ -477,21 +513,6 @@
             fieldset { border: 1px solid rgba(64, 64, 64, 0.5); text-shadow: 1px 1px 0px #000000, 0px 1px 0px #000000; margin: auto; }
             .break { margin-top: 8px; }
 
-            .modal {
-                display: block;     position: fixed;
-                z-index: 1;
-                padding-top: 100px;
-                top: 0;             left: 0;
-                width: 100%;        height: 100%;
-                overflow: auto;
-                background-color: rgb(0,0,0); background-color: rgba(0,0,0,0.4);
-            }
-            .modal-content {
-                background-color: #C8C8C8;
-                margin: auto;       padding: 20px;
-                width: 300px;
-            }
-
             input[type="radio"] {
                 display: none;
             }
@@ -514,16 +535,14 @@
     <body>
         <iframe name="dummy" id="dummy" style="display: none;"></iframe>
         <form id="form_tournament" action="/tournament" method="POST" target="dummy">
-            <div id="myModal" class="modal">
-                <div class="modal-content">
-                    <fieldset>
-                        <legend>Tournament</legend>
-                        <div>
-                            <input type="text"      id="tournament_slug"    name="tournament_slug"  placeholder="Tournament Slug">
-                            <button id="tournament_selected">Submit</button>
-                        </div>
-                    </fieldset>
-                </div>
+            <div>
+                <fieldset>
+                    <legend>Tournament</legend>
+                    <div>
+                        <input type="text"      id="tournament_slug"    name="tournament_slug"  placeholder="Tournament Slug">
+                        <button id="tournament_selected">Submit</button>
+                    </div>
+                </fieldset>
             </div>
         </form>
         <form id="form" action="" method="POST" target="dummy">

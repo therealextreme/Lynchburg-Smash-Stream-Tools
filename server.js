@@ -29,11 +29,11 @@ var tournament = {          // tournament info, sent to the overlay whenever cal
 }
 
 var tournament_info = {
-    "name": "",
-    "slug": "",
-    "date": 0,
-    "participants": [],
-    "events": []
+    "name": "",             // name of the tournament
+    "slug": "",             // slug (url)
+    "date": "",             // date
+    "participants": [],     // participants. this is an array of dictionaries, with each dictionary representing a player with their name, tag, internal id, and social media
+    "events": []            // list of events with the participants of each event. participants are just a list of ids
 };
 
 async function get_tournament(tournament_slug) {
@@ -41,6 +41,7 @@ async function get_tournament(tournament_slug) {
       query GetTournament($slug: String) {
         tournament(slug: $slug) {
           name
+          slug
           shortSlug
           startAt
           participants(query: {
@@ -64,6 +65,7 @@ async function get_tournament(tournament_slug) {
               displayName
               slug
             }
+            entrantSizeMin
             entrants(query: {
               page: 1
               perPage: 500
@@ -102,29 +104,33 @@ function get_tag(participant) {
 
 function parse_tournament_data(tournament) {
     tournament_info["name"] = tournament.name;
-    tournament_info["slug"] = tournament.shortSlug;
+    if (tournament.shortSlug != null) {
+        tournament_info["slug"] = tournament.shortSlug;
+    }
+    else {
+        tournament_info["slug"] = tournament.slug;
+    }
     var d = new Date(tournament.startAt * 1000);
     const year = d.getFullYear()
     tournament_info["date"] = (eval(d.getMonth()) + 1) + "/" + (eval(d.getDate())) + "/" + year.toString().substring(2, 4);
     tournament_info["participants"].length = 0;
     tournament_info["events"].length = 0;
+    for (var i = 0; i < tournament.events.length; i++) {
+        tournament_info["events"].push({ "name": tournament.events[i].name, "entrants": [], "max_team_size": tournament.events[i].entrantSizeMin });
+        for (var j = 0; j < tournament.events[i].entrants.nodes.length; j++) {
+            var message = [];
+            for (var k = 0; k < tournament.events[i].entrants.nodes[j].participants.length; k++) {
+                message.push(tournament.events[i].entrants.nodes[j].participants[k].id);
+            }
+            tournament_info["events"][i]["entrants"].push(message);
+        }
+    }
     for (const p of tournament.participants.nodes) {
         if (p.user != null) {
             tournament_info["participants"].push({ "id": p.id, "tag": get_tag(p), "name": p.user.name, "socials": p.user.authorizations });
         }
         else {
             tournament_info["participants"].push({ "id": p.id, "tag": get_tag(p), "name": null, "socials": null });
-        }
-    }
-    for (i = 0; i < tournament.events.length; i++) {
-        let e = tournament.events[i];
-        tournament_info["events"].push({ "name": e.name, "entrants": [] });
-        for (p of e.entrants.nodes) {
-            message = [];
-            for (const x of p.participants) {
-                message.push(x.id); 
-            }
-            tournament_info["events"][i]["entrants"].push(message);
         }
     }
     tournament_info["participants"] = tournament_info["participants"].sort(function(a, b) {
@@ -134,28 +140,6 @@ function parse_tournament_data(tournament) {
         if (nameA > nameB) { return 1; }
         return 0;
     });
-    for (i = 0; i < tournament_info.events.length; i++) {
-        let e = tournament_info.events[i];
-        let tags = [];
-        for (j = 0; j < e["entrants"].length; j++) {
-            for (k = 0; k < tournament_info["participants"].length; k++) {
-                if (e["entrants"][j] == tournament_info["participants"][k]["id"]) {
-                    tags.push(tournament_info["participants"][k]);
-                }
-            }
-        }
-        tags = tags.sort(function(a, b) {
-            var nameA = a["tag"].toUpperCase();
-            var nameB = b["tag"].toUpperCase();
-            if (nameA < nameB) { return -1; }
-            if (nameA > nameB) { return 1; }
-            return 0;
-        });
-        for (t of tags) {
-            t = t["id"];
-        }
-        e["entrants"] = tags;
-    }
 }
 
 // get user?
@@ -190,8 +174,8 @@ app.post("/tournament", function(request, response) {
 // start server
 app.listen(PORT, () => {
     console.log("Listening at localhost:" + PORT + "...\n");
-    console.log("Stream Tool:         http://" + ip.address() + ":" + PORT + "/tool/");
+    console.log("Stream Tool:           http://" + ip.address() + ":" + PORT + "/tool/");
     console.log("Alternate Stream Tool: http://" + ip.address() + ":" + PORT + "/tool/alt/\n");
-    console.log("Game Overlay:        " + process.cwd() + "\\assets\\overlays\\game\\index.html");
-    console.log("Transition:          " + process.cwd() + "\\assets\\overlays\\transition\\index.html");
+    console.log("Game Overlay:          " + process.cwd() + "\\assets\\overlays\\game\\index.html");
+    console.log("Transition:            " + process.cwd() + "\\assets\\overlays\\transition\\index.html");
 });
