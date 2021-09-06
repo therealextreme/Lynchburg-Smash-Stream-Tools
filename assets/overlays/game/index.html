@@ -53,6 +53,7 @@
                     document.getElementById("p2_bracket_value").textContent =       p2_bracket;
                     document.getElementById("set_name_value").textContent =         set_name;
                     document.getElementById("event_name_value").textContent =       event_name;
+                    document.getElementById("caster_name_value").textContent =      "on the mic";
                     document.getElementById("c1_id_value").textContent =            c1_id;
                     document.getElementById("c1_name_value").textContent =          c1_name;
                     try {
@@ -112,7 +113,7 @@
 
                         fade_in("p1_name_location");
                         fade_in("p2_name_location");
-                        if (set_name != "Friendlies") {
+                        if (set_name != "Friendlies" && set_name != "") {
                             if (p1_score != "") { fade_in("p1_score_location"); }
                             if (p2_score != "") { fade_in("p2_score_location"); }
                         }
@@ -121,7 +122,9 @@
                             if (p2_bracket != "") { fade_in("p2_bracket_location"); }
                         }
                         fade_in("set_name_location");
-                        fade_in("caster_location");
+                        if (c1_name != "" || c2_name != "") {
+                            fade_in("caster_location");
+                        }
                         fade_in("c1_name_location");
                         fade_in("c2_name_location");
                         swap_date();
@@ -135,7 +138,7 @@
                     if (document.getElementById("p1_name_value").textContent != p1_name) {
                         update_value("p1_name", p1_name);
                     }
-                    if (set_name != "Friendlies") {
+                    if (set_name != "Friendlies" && set_name != "") {
                         if (document.getElementById("p1_score_value").textContent != p1_score && p1_score != "") {
                             update_value("p1_score", p1_score);
                         }
@@ -578,7 +581,7 @@
         </div>
         <div        id = "caster_location"          class = "absolute fade_slide caster_location">
             <img    id = "caster_image"             class = "caster_image" src = "../../img/elements\mic.png">
-            <span   id = "caster_name_value"        class = "caster_name_value">on the mic</span>
+            <span   id = "caster_name_value"        class = "caster_name_value"></span>
         </div>
         <span       id = "c1_id_value"              class = "c1_id_value"></span>
         <div        id = "c1_name_location"         class = "absolute fade_slide c1_name_location">

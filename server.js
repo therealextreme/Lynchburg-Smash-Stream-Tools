@@ -127,10 +127,10 @@ function parse_tournament_data(tournament) {
     }
     for (const p of tournament.participants.nodes) {
         if (p.user != null) {
-            tournament_info["participants"].push({ "id": p.id, "tag": get_tag(p), "name": p.user.name, "socials": p.user.authorizations });
+            tournament_info["participants"].push({ "id": p.id, "tag": p.gamerTag, "name": p.user.name, "socials": p.user.authorizations });
         }
         else {
-            tournament_info["participants"].push({ "id": p.id, "tag": get_tag(p), "name": null, "socials": null });
+            tournament_info["participants"].push({ "id": p.id, "tag": p.gamerTag, "name": null, "socials": null });
         }
     }
     tournament_info["participants"] = tournament_info["participants"].sort(function(a, b) {
@@ -140,6 +140,13 @@ function parse_tournament_data(tournament) {
         if (nameA > nameB) { return 1; }
         return 0;
     });
+    for (const p of tournament.participants.nodes) {
+        for (const player of tournament_info["participants"]) {
+            if (p.id == player["id"]) {
+                player["tag"] = get_tag(p);
+            }
+        }
+    }
 }
 
 // get user?
@@ -178,4 +185,5 @@ app.listen(PORT, () => {
     console.log("Alternate Stream Tool: http://" + ip.address() + ":" + PORT + "/tool/alt/\n");
     console.log("Game Overlay:          " + process.cwd() + "\\assets\\overlays\\game\\index.html");
     console.log("Transition:            " + process.cwd() + "\\assets\\overlays\\transition\\index.html");
+    console.log("Break:                 " + process.cwd() + "\\assets\\overlays\\break\\index.html");
 });

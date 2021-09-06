@@ -4,6 +4,7 @@
         <meta   charset = "UTF-8">
         <script>
             let startup = true;
+            var bg_lines_x = 0;
 
             window.onload = init;
 
@@ -13,6 +14,10 @@
                     parse_data(game);
                 }
                 main();
+                setInterval( () => {
+                    document.getElementById("bg_lines").style.backgroundPosition = bg_lines_x + "px " + 0 + "px";
+                    bg_lines_x += 1;
+                }, 25);
                 setInterval( () => {
                     main();
                 }, 500);
@@ -45,72 +50,8 @@
 
                 if (startup == true) {
 
-                    document.getElementById("p1_id_value").textContent =            p1_id;
-                    document.getElementById("p2_id_value").textContent =            p2_id;
-                    document.getElementById("p_name_value").textContent =           p1_name + " VS " + p2_name;
-                    if (p1_name == "") {
-                        document.getElementById("p_name_value").textContent =       p2_name;
-                    }
-                    if (p2_name == "") {
-                        document.getElementById("p_name_value").textContent =       p1_name;
-                    }
-                    if (p1_name == "" && p2_name == "") {
-                        document.getElementById("p_name_value").textContent =       "";
-                    }
                     document.getElementById("set_name_value").textContent =         set_name;
                     document.getElementById("event_name_value").textContent =       event_name;
-                    document.getElementById("c1_id_value").textContent =            c1_id;
-                    document.getElementById("c1_name_value").textContent =          c1_name;
-                    try {
-                        document.getElementById("c1_social_1_value").textContent =  c1_socials[0]["externalUsername"];
-                        document.getElementById("c1_social_1_image").src =          "../../img/socials/" + c1_socials[0]["type"] + ".png";
-                    }
-                    catch(err) {
-                        document.getElementById("c1_social_1_value").textContent =  "";
-                        document.getElementById("c1_social_1_image").src =          "../../img/socials/undefined.png";
-                    }
-                    try {
-                        document.getElementById("c1_social_2_value").textContent =  c1_socials[1]["externalUsername"];
-                        document.getElementById("c1_social_2_image").src =          "../../img/socials/" + c1_socials[1]["type"] + ".png";
-                    }
-                    catch(err) {
-                        document.getElementById("c1_social_2_value").textContent =  "";
-                        document.getElementById("c1_social_2_image").src =          "../../img/socials/undefined.png";
-                    }
-                    try {
-                        document.getElementById("c1_social_3_value").textContent =  c1_socials[2]["externalUsername"];
-                        document.getElementById("c1_social_3_image").src =          "../../img/socials/" + c1_socials[2]["type"] + ".png";
-                    }
-                    catch(err) {
-                        document.getElementById("c1_social_3_value").textContent =  "";
-                        document.getElementById("c1_social_3_image").src =          "../../img/socials/undefined.png";
-                    }
-                    document.getElementById("c2_id_value").textContent =            c2_id;
-                    document.getElementById("c2_name_value").textContent =          c2_name;
-                    try {
-                        document.getElementById("c2_social_1_value").textContent =  c2_socials[0]["externalUsername"];
-                        document.getElementById("c2_social_1_image").src =          "../../img/socials/" + c2_socials[0]["type"] + ".png";
-                    }
-                    catch(err) {
-                        document.getElementById("c2_social_1_value").textContent =  "";
-                        document.getElementById("c2_social_1_image").src =          "../../img/socials/undefined.png";
-                    }
-                    try {
-                        document.getElementById("c2_social_2_value").textContent =  c2_socials[1]["externalUsername"];
-                        document.getElementById("c2_social_2_image").src =          "../../img/socials/" + c2_socials[1]["type"] + ".png";
-                    }
-                    catch(err) {
-                        document.getElementById("c2_social_2_value").textContent =  "";
-                        document.getElementById("c2_social_2_image").src =          "../../img/socials/undefined.png";
-                    }
-                    try {
-                        document.getElementById("c2_social_3_value").textContent =  c2_socials[2]["externalUsername"];
-                        document.getElementById("c2_social_3_image").src =          "../../img/socials/" + c2_socials[2]["type"] + ".png";
-                    }
-                    catch(err) {
-                        document.getElementById("c2_social_3_value").textContent =  "";
-                        document.getElementById("c2_social_3_image").src =          "../../img/socials/undefined.png";
-                    }
                     document.getElementById("tournament_name_value").textContent =  tournament_name;
                     document.getElementById("tournament_date_value").textContent =  tournament_date;
                     document.getElementById("upcoming_set_name_value").textContent =        "UP NEXT: " + upcoming_set_name + " - " + upcoming_p1_name + " VS " + upcoming_p2_name;
@@ -129,23 +70,14 @@
 
                     setTimeout(() => {
 
-                        fade_in("p_name_location");
-                        fade_in("set_name_location");
-                        if (c1_name != "" || c2_name != "") {
-                            fade_in("caster_location");
-                        }
-                        fade_in("c1_name_location");
-                        fade_in("c2_name_location");
                         fade_in("upcoming_set_name_location");
                         swap_date();
-                        rotate_c1_socials_1();
-                        rotate_c2_socials_1();
                         startup = false;
 
                     }, 500);
                 }
                 else {
-                    if (p1_name != "" && p2_name != "") {
+                    /*if (p1_name != "" && p2_name != "") {
                         if (document.getElementById("p_name_value").textContent != p1_name + " VS " + p2_name || document.getElementById("p_name_value").textContent != p1_name || document.getElementById("p_name_value").textContent != p2_name || document.getElementById("p_name_value").textContent != "") {
                             if (p1_name == "" && p2_name == "") {
                                 update_value("p_name", "");
@@ -163,7 +95,7 @@
                     }
                     if (document.getElementById("set_name_value").textContent != set_name) {
                         update_value("set_name", set_name);
-                    }
+                    }*/
                 }
                 return;
             }
@@ -313,8 +245,8 @@
             }
 
             .logo_image {
-                width: 512px;   height: 256px;
-                top: 726px;     left: 1102px;
+                width: 1024px;  height: 512px;
+                top: 63px;      left: 448px;
             }
 
             .tournament_name_location {
@@ -434,8 +366,8 @@
             .set_name_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
 
             .upcoming_set_name_location {
-                bottom: 9px;        left: 780px;
-                font-size: 60px;    line-height: 72px;
+                bottom: 9px;        left: 16px;
+                font-size: 72px;    line-height: 84px;
                 font-family: "Bureau-Grot-Condensed";
                 text-shadow: 5px 5px 0px var(--shadow-color);
                 opacity: 0;         transform: translate(20px, 0px);
@@ -452,10 +384,22 @@
             }
             .p_name_location.fade_out { opacity: 0; transform: translate(20px, 0px); }
             .p_name_location.fade_in { opacity: 1; transform: translate(0px, 0px); }
+
+            .background_lines {
+                position: absolute;
+                width: 1920px;
+                height: 1080px;
+                top: 0px;
+                left: 0px;
+                background-image: url("../../img/background_lines.png");
+                background-repeat: repeat-x;
+                opacity: 0.3;
+            }
         </style>
     </head>
     <body>
-        <img        id = "background_image"         class = "absolute background_image" src = "../../img/background_transition.png">
+        <img        id = "background_image"         class = "absolute background_image" src = "../../img/background_break.png">
+        <img        id = "bg_lines"                 class = "background_lines"></div>
         <img        id = "logo_1_image"             class = "absolute logo_image"       src = "../../img/logos/logo_2_image.png">
         <div        id = "tournament_name_location" class = "absolute tournament_name_location">
             <span   id = "tournament_name_value"    class = "tournament_name_value"></span>
@@ -507,11 +451,6 @@
         <div        id = "c2_social_3_location"     class = "absolute fade_slide c2_social_location c2_social_3_location">
             <img    id = "c2_social_3_image"        class = "caster_social_image c2_social_3_image">
             <span   id = "c2_social_3_value"        class = "c2_social_3_value"></span>
-        </div>
-        <span       id = "p1_id_value"              class = "p1_id_value"></span>
-        <span       id = "p2_id_value"              class = "p2_id_value"></span>
-        <div        id = "p_name_location"         class = "absolute fade_slide p_name_location">
-            <span   id = "p_name_value"            class = "p_name_value"></span>
         </div>
     </body>
 </html>
