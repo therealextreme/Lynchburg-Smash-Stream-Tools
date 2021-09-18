@@ -9,18 +9,32 @@ A set of overlays for streaming, made for Lynchburg Smash. Includes overlays for
 
 Create a file in the root of the repository named `SMASHGG_TOKEN.txt` with your smash.gg API key, found under developer settings on smash.gg.
 
-Open a command line to the root of the repository and enter these commands:
+Go to the file where all steam overlay is stored and right click the file bar and select "copy address"
+
+Open a command line to the root of the repository
+
+This is done by first opening the command console (can be done by doing `windows key` + `r` and then typing `cmd` and pressing enter
+
+Then type in 
+
+    cm [paste your file address here for the root of the repository]" 
+    
+and the press `enter`
+
+For the first install, enter these commands:
 
     npm install
     node server.js
 
 After running once you can just use `node server.js` to run the overlay.
 
-It will provide a list of urls, which are used for overlays and control. This window must be left running as long as you are using the overlays.
+It will provide a list of urls that can be copy pasted into a browser. These are used for overlays and control. This window must be left running as long as you are using the overlays.
 
-Go into OBS or Streamlabs and set up a new browser source. Check `Local file` and set the source to whatever location the executable gives you.
+Go into OBS or Streamlabs and set up a new browser source. Check `Local file` and set the source to whatever location the executable gives you. 
 
-Set the width to 1920 (1280 if streaming in 720p) and the height to 1080 (720 if streaming in 720p).
+This can be done by taking the file address written out in the command console and pasting it into center bottom search bar in the `Local File` file browser and pressing enter.
+
+Back in OBS, set the width to 1920 (1280 if streaming in 720p) and the height to 1080 (720 if streaming in 720p).
 
 Check `Shutdown Source When Not Visible` and `Refresh Broswer Source When Scene Becomes Active` before closing the properties.
 
