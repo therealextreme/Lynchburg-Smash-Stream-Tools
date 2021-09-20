@@ -9,7 +9,7 @@ A set of overlays for streaming, made for Lynchburg Smash. Includes overlays for
 
 Create a file in the root of the repository named `SMASHGG_TOKEN.txt` with your smash.gg API key, found under developer settings on smash.gg.
 
-Go to the file where all steam overlay is stored and right click the file bar and select "copy address"
+Go to the file where all stream overlay is stored and right click the file bar and select "copy address"
 
 Open a command line to the root of the repository
 
